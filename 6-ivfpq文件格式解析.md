@@ -46,8 +46,8 @@
 |  Quantizer  |                   | centroids.size |　centroids.data() |
 |             |　　　　　　　　　　　 -------------------------------------
  -------------
-|             |　　　　　　　　　　　 --------
-|             |                   | ilar |
+|             |　　　　　　　　　　　 ---------------------------
+|             |                   | ilar | nlist | code_size |
 |  Inverted   |------------------>----------------------------------------
 |  List       |                   | full ｜ ids_list.size |ids_list.data |
 |             |　　　　　　　　　　　 ----------------------------------------
@@ -485,4 +485,14 @@ if (ivfpqr) {
     WRITEVECTOR (ivfpqr->refine_codes);
     WRITE1 (ivfpqr->k_factor);
 }
+```
+
+## 残差列表
+残差列表不存储文件,每次加载重新计算残差列表
+默认不使用残差列表
+```
+// precomputed table not stored. It is cheaper to recompute it
+ivpq->use_precomputed_table = 0;
+if (ivpq->by_residual)
+    ivpq->precompute_table ();
 ```
