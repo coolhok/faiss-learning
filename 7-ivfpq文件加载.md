@@ -1,6 +1,7 @@
 # ivfpq文件格式加载
 
 ## 文件布局
+```
  -------------
 |             |
 |    magic    |
@@ -53,7 +54,7 @@
 |             |                   |codes| ids|
 |             |　                  -----------
  -------------                     .........
-
+```
 ## 基础宏定义
 ```
 // will fail if we write 256G of data at once...
@@ -142,6 +143,7 @@ static void read_ivf_header (
 }
 ```
 ### 读取index header
+```
  -------------
 |             |　　　　　　　　　　　　－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－
 |             |                   |　　　　｜　　　　｜　　　　｜　　　　｜　　　　 ｜　　　　｜　　
@@ -149,6 +151,7 @@ static void read_ivf_header (
 |    header   |                   |　　　　｜　　　　｜　　　　｜　　　　｜　　 　　｜　　　　｜　　
 |             |　　　　　　　　　　　　－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－
  -------------
+```
 ```
 static void read_index_header (Index *idx, IOReader *f) {
     READ1 (idx->d);   # 读取数据维度   int
@@ -162,6 +165,7 @@ static void read_index_header (Index *idx, IOReader *f) {
 }
 ```
 ### nlist nprobe 读取
+```
  -------------
 |             |
 |    nlist    |
@@ -172,10 +176,12 @@ static void read_index_header (Index *idx, IOReader *f) {
 |             |
  -------------
 ```
+```
 READ1 (ivf->nlist);  # 读取 nlist
 READ1 (ivf->nprobe); # 读取 nprobe
 ```
 ### ivf quantizer读取
+```
  -------------
 |             |　　　　　　　　　　　 ---------
 |             |                   |　IxF2 ｜　　
@@ -185,7 +191,8 @@ READ1 (ivf->nprobe); # 读取 nprobe
 |             |                   |xb.size| xb.data| direct | direct_map |   
 |             |　                  ---------------------------------------
  -------------
- ```
+```
+```
 if (h == fourcc ("IxFI") || h == fourcc ("IxF2")) {
     IndexFlat *idxf;
     if (h == fourcc ("IxFI")) idxf = new IndexFlatIP ();
@@ -196,22 +203,23 @@ if (h == fourcc ("IxFI") || h == fourcc ("IxF2")) {
     // leak!
     idx = idxf;
 }
- ```
+```
  ### IVFpq不走改分支可忽略
- ```
+```
 if (ids) { // used in legacy "Iv" formats
     ids->resize (ivf->nlist);
     for (size_t i = 0; i < ivf->nlist; i++)
         READVECTOR ((*ids)[i]);
 }
- ```
+```
  ### direct_map读取
- ```
+```
 READ1 (ivf->maintain_direct_map);
 READVECTOR (ivf->direct_map);
- ```
+```
 
  ## residual code_size读取
+```
  -------------
 |             |
 |  residual   |
@@ -224,8 +232,9 @@ READVECTOR (ivf->direct_map);
 ```
 READ1 (ivpq->by_residual); # 读取是否初始化残差矩阵
 READ1 (ivpq->code_size);   # code_size
-```
+
 ## ProductQuantizer 读取
+```
  -------------
 |             |　　　　　　　　　　　 -------------------------
 |             |                   |　 D   ｜ M     | nbits ｜　　　
@@ -279,7 +288,7 @@ READVECTOR (pq->centroids); # size = d * 2^nbits*4
 |             |　                  -----------
  -------------                     .........
 
- ```
+```
  static void read_InvertedLists (
         IndexIVF *ivf, IOReader *f, int io_flags) {
     InvertedLists *ils = read_InvertedLists (f, io_flags);
@@ -314,7 +323,7 @@ READ1 (h);
         }
     }
     return ails;
- ```
+```
 
 ### nlist code_size 读取
 ```
