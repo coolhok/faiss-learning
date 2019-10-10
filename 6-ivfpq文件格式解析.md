@@ -60,7 +60,7 @@
 ```
 ## 测试条件
 ```
-样本总量 1024 * 1024 * 2
+样本总量 256 * 8 * 1024
 维度256
 PQ成32段
 每个code固定量化空间是256个，即nbits=8
@@ -124,7 +124,7 @@ static void write_ivf_header (const IndexIVF *ivf, IOWriter *f) {
 ```
 static void write_index_header (const Index *idx, IOWriter *f) {
     WRITE1 (idx->d);　　　　　# int 数据维度　256
-    WRITE1 (idx->ntotal);   # int 向量总数　1024 * 1024 * 2
+    WRITE1 (idx->ntotal);   # int 向量总数　256 * 8 * 1024
     Index::idx_t dummy = 1 << 20;  
     WRITE1 (dummy);         # int64 1 << 20
     WRITE1 (dummy);         # int64 1 << 20
