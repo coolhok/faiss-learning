@@ -258,7 +258,7 @@ Tensor(DataPtrType data, std::initializer_list<IndexT> sizes)
 }
 ```
 
-###张量深度拷贝 支持跨显卡拷贝
+###张量深度拷贝
 ```
 template <typename T, int Dim, bool InnerContig,
           typename IndexT, template <typename U> class PtrTraits>
